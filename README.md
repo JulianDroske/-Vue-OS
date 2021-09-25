@@ -6,6 +6,12 @@ A simple UI with transitions
 
 Still in progress...
 
+## Test built files
+``` bash
+# supports linux x86/x64
+./miniweb -r ./dist
+```
+
 ## Original guide
 
 ### Build Setup
