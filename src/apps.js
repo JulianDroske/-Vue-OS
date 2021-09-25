@@ -42,7 +42,7 @@ export default{
 				pkg,
 				name: app.title,
 				icon: app.icon,
-				url: '/@/apps/'+pkg
+				url: '/#/@/apps/'+pkg
 			});
 		}
 

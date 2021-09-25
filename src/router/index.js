@@ -5,11 +5,13 @@ import Apps from '@/apps'
 
 Vue.use(Router)
 
-var routes = [{
-	path: '/',
-	name: 'Desktop',
-	component: Desktop
-}]
+var routes = [
+	{
+		path: '/',
+		name: 'Desktop',
+		component: Desktop
+	}
+]
 
 
 function initApps(){
@@ -25,6 +27,6 @@ function initApps(){
 initApps();
 
 export default new Router({
-  mode: 'history',
+//   mode: 'history',
   routes
 })
