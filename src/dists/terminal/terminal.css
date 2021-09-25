@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#screen {
+    background-color: black;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+	cursor: text;
+}
+
+#Container {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#Container,
+#Container>div {
+    -moz-transform: rotateX(180deg);
+    -ms-transform: rotateX(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotateX(180deg);
+    transform: rotateX(180deg);
+}
+
+#wrapper {
+	width: 100%;
+    /* display: table-cell; */
+    display: block;
+    /* vertical-align: bottom; */
+    height: 100%;
+}
+
+.log {
+	width: 100%;
+    /* padding-left: 10px;
+    padding-right: 10px; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+	border-bottom: 1px solid grey;
+}
+
+p {
+	color: grey;
+}
+
+.log p {
+    /* color: #00e676; */
+    font-family: 'Source Code Pro', monospace;
+    margin: 0;
+	word-wrap: break-word;
+	max-width: 100%;
+}
+
+.log-log, #input_title, input[type="command"] {
+	color: white;
+}
+/* 
+#input {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+ */
+#input p {
+    /* color: #00e676; */
+    display: inline-block;
+    font-family: 'Source Code Pro', monospace;
+    /* padding-right: .4em; */
+    margin: 0;
+}
+
+#input input {
+    width: 85%;
+    display: inline-block;
+	caret-color: grey;
+}
+
+input[type="command"] {
+    background-color: inherit;
+    border: 0;
+    /* color: #00e676; */
+    font-family: 'Source Code Pro', monospace;
+    font-size: 16px;
+    outline: none;
+}
