@@ -31,6 +31,18 @@ var osApps = {
 		icon: (()=>require('@/icons/vue.png'))(),
 		title: 'Terminal'
 	},
+	'terminal7': {
+		icon: (()=>require('@/icons/vue.png'))(),
+		title: 'Terminal'
+	},
+	'terminal8': {
+		icon: (()=>require('@/icons/vue.png'))(),
+		title: 'Terminal'
+	},
+	'terminal9': {
+		icon: (()=>require('@/icons/vue.png'))(),
+		title: 'Terminal'
+	},
 }
 
 export default{

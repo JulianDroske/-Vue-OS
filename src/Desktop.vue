@@ -2,9 +2,9 @@
 	<div id="Desktop" class="fulfill" style="display: flex; flex-direction: column;" @click="closeStartMenu" @contextmenu.stop.prevent="onMenu">
 		<!-- <router-view /> -->
 		<div ref='windowsView' style="position: relative; width: 100%; height: 100%; z-index: 2;">
-			<Window v-for="(tag,index) in windows" :key='tag.pid' :title="tag.title" :pid="tag.pid" :icon="tag.icon" :url="tag.url" :maxSiz='windowMaxSiz' :style="{'z-index': tag.zIndex}" :open="tag.open" @min='onMinWindow(index)' @close="onCloseWindow(index)" @mousedown.native="dragTop(index)"></Window>
+			<Window v-for="(tag,index) in windows" :key='tag.pid' :ref='"window"+tag.pid' :title="tag.title" :pid="tag.pid" :icon="tag.icon" :url="tag.url" :maxSiz='windowMaxSiz' :style="{'z-index': tag.zIndex}" :open="tag.open" @min='onMinWindow(index)' @close="onCloseWindow(index)" @mousedown.native="dragTop(index)"></Window>
 		</div>
-		<div id="bar" style="position: relative; bottom: 0px; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; flex: 1; color: white; z-index: 999;" :style="{ height: barHeight, 'border-radius': barRadius }">
+		<div id="bar" class="blurback" style="position: relative; bottom: 0px; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; flex: 1; color: white; z-index: 999;" :style="{ height: barHeight, 'border-radius': barRadius }">
 			<div id="start" class="icon btn" @click.stop="toggleStartMenu" style="position: relative; background: rgba(0, 0, 0, 0.08)" :style="{ width: barHeight, height: barHeight }">
 				<img src="./icons/vue.png" class="center" style="height: 60%; width: auto" alt="" />
 			</div>
@@ -98,8 +98,8 @@ export default {
 
 		this.$os.$on('osResize', this.refreshSiz)
 
-		document.onkeyup = (e) => {
-			console.log(e.key, e.ctrlKey)
+		document.onkeydown = (e) => {
+			// console.log(e.key, e.ctrlKey)
 			switch (e.key) {
 				case 'Shift':
 					this.toggleStartMenu();
@@ -109,11 +109,25 @@ export default {
 			}
 		}
 
-		this.$os.$on('openApp', appName => {
-			this.openApp(appName);
+		this.$os.$on('openApp', app => {
+			this.openApp(app);
 		})
 
-		this.$os.$on('disableFrame', this.disFrame);
+		// this.$os.$on('disableFrame', this.disFrame);
+
+		this.$os.$on('sysMsg', msgData => {
+			// TODO add a message
+		});
+
+		addEventListener('message', d=>{
+			d = d.data;
+			switch(d.msg){
+				case 'closeWindow':
+					var pid = d.data;
+					this.$refs['window'+pid][0].$emit('requireClose');
+					break;
+			}
+		});
 	},
 	methods: {
 		openApp(app) {
@@ -127,6 +141,7 @@ export default {
 				open: true
 			});
 			this.closeStartMenu();
+			this.dragTop(this.windows.length-1)
 		},
 		dragTop(i) {
 			if (this.lastTop != i) {
@@ -141,17 +156,15 @@ export default {
 		toggleStartMenu() {
 			this.$refs.startmenu.toggle(this.startMenu = !this.startMenu);
 		},
-		disFrame(dis) {
-			this.$os.iFrameCompat['pointer-events'] = dis ? 'none' : 'all';
-		},
-		disableFrame() {
-			// this.$os.$emit('disableFrame', true);
-			this.disFrame(true);
-		},
-		enableFrame() {
-			// this.$os.$emit('disableFrame', false);
-			this.disFrame(false);
-		},
+		// disFrame(dis) {
+		// 	this.$os.iFrameCompat['pointer-events'] = dis ? 'none' : 'all';
+		// },
+		// disableFrame() {
+		// 	this.disFrame(true);
+		// },
+		// enableFrame() {
+		// 	this.disFrame(false);
+		// },
 		refreshSiz(siz) {
 			this.sizMin = '' + Math.min(siz.width, siz.height) + 'px';
 			this.windowMaxSiz = [this.$refs.windowsView.clientWidth, this.$refs.windowsView.clientHeight];

@@ -14,6 +14,11 @@ const webpackConfig = require('./webpack.prod.conf')
 const spinner = ora('building for production...')
 spinner.start()
 
+if(process.argv[2] == 'public'){
+	console.log('\n\nSwitching to publishment...\n');
+	config.build = config.pub;
+}
+
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, (err, stats) => {

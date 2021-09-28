@@ -2,8 +2,8 @@
 	<transition name="window" appear>
 		<div class="fulfill" v-show="show1" @click.stop="">
 			<transition name="window-center" appear>
-				<div v-show="show2" class="center fulfill shadow-big blurback round" style="background: rgba(0,0,0,0.2); transition: all .4s">
-					<List ref="appList" class="fulfill" style="transform: scale(0.5); border-radius: 10px; font-size: 200%; width: auto;" title="Start" @itemClick="openApp" @click.stop=""></List>
+				<div v-show="show2" class="center fulfill shadow-big blurback round" style="background: rgba(0,0,0,0.2); transition: all .4s" @click="thide">
+					<List ref="appList" class="fulfill" style="transform: scale(0.5); border-radius: 10px; font-size: 200%; width: auto;" title="Start" @itemClick="openApp" @click.native.stop=""></List>
 				</div>
 			</transition>
 		</div>

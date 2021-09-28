@@ -9,7 +9,8 @@ Still in progress...
 ## Test built files
 ``` bash
 # supports linux x86/x64
-./miniweb -r ./dist
+./miniweb -r ./distout
+# ./distout is auto-generated only when 'npm run build' was executed.
 ```
 
 ## Original guide

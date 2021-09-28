@@ -26,6 +26,22 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
+.vinput {
+	outline: none;
+	border: solid 2px grey;
+	border-radius: 10px;
+	padding: 10px;
+}
+/* 
+.vinput::selection {
+	border: none;
+}
+
+.vinput::-webkit-input-placeholder, .vinput:-moz-placeholder, .vinput::-moz-placeholder {
+	border: none;
+}
+*/
+
 /* Animates */
 
 .btn {
@@ -132,6 +148,7 @@
 .task-enter, .task-leave-to {
 	opacity: 0;
 	width: 0%;
+	margin-left: -100%;
 }
 
 

@@ -1,7 +1,9 @@
 <template>
 	<!-- <transition name="outwindow" appear> -->
-		<DragResize :isActive='true' ref="outwindow" v-show="open" v-on:resizing='resize' v-on:dragging='resize' @mousedown.native="()=>{if(!maxed){disableFrame(true);sizeReset();enableSizAnim(false);}}" @stickClickDown="disableFrame(true);sizeReset();enableSizAnim(false)"
-		    @mouseup.native="disableFrame(false);enableSizAnim()" @stickClickUp="disableFrame(false);enableSizAnim()" class="shadow viewonly" style="position: absolute; border: 2px solid grey; border-radius: 10px; background: rgba(200, 200, 255, 0.2);">
+		<DragResize :isActive='true' ref="outwindow" v-show="open" v-on:resizing='resize' v-on:dragging='resize'
+			@touchstart.native="disableFrame(true);sizeReset();enableSizAnim(false);" @mousedown.native="()=>{if(!maxed){disableFrame(true);sizeReset();enableSizAnim(false);}}" @stickClickDown="disableFrame(true);sizeReset();enableSizAnim(false)"
+		    @touchend.native="disableFrame(false);enableSizAnim()" @mouseup.native="disableFrame(false);enableSizAnim()" @stickClickUp="disableFrame(false);enableSizAnim()"
+			class="shadow viewonly" style="position: absolute; border: 2px solid grey; border-radius: 10px; background: rgba(200, 200, 255, 0.2);">
 			<!-- <DragResize :isActive='true' v-if="border" v-on:resizing='resize' v-on:dragging='resize' class="shadow viewonly" style="position: absolute; border: 2px solid grey; border-radius: 10px; background: rgba(200, 200, 255, 0.2);"> -->
 			<transition name='window' appear>
 				<div class="window-frame" v-show='show' style="width: 100%; display: flex; flex-direction: column;">
@@ -44,7 +46,7 @@ export default {
 			barHeight: '40px',
 			show: true,
 			// open: true,
-			content: true,
+			content: false,
 			// visib: true,
 			frame: false,
 			maxed: false,
@@ -65,11 +67,40 @@ export default {
 		open: Boolean
 	},
 	mounted() {
+
+		// register &touch events
+
+		// function addEvents(events) {
+		// 	events.forEach((cb, eventName) => {
+		// 		document.documentElement.addEventListener(eventName, cb);
+		// 	});
+		// }
+
+		// var domEvents = new Map([
+        //     ['mousemove', this.move],
+        //     ['mouseup', this.up],
+        //     ['mouseleave', this.up],
+        //     ['mousedown', this.deselect],
+        //     ['touchmove', this.move],
+        //     ['touchend', this.up],
+        //     ['touchcancel', this.up],
+        //     ['touchstart', this.up],
+        // ]);
+
+        // addEvents(domEvents);
+
+
 		setTimeout(() => {
-			this.Src = this.url;
+			this.content = true;
+			this.Src = this.$os.appendWindowArg(this.url, 'pid', this.pid);
+			// this.$os.postIn(this.$refs.body, 'PID', this.pid);
 		}, 200);
 		this.$refs.outwindow.maxWidth = this.maxSiz[0];
 		this.$refs.outwindow.maxHeight = this.maxSiz[1];
+
+		this.$on('requireClose', ()=>{
+			this.close();
+		})
 	},
 	// computed() {
 	// },
@@ -82,11 +113,17 @@ export default {
 			if(!this.maxed) this.$refs.body.style.height = '' + (rect.height - 40) + 'px';
 		},
 		close() {
-			this.show = false;
+			// this.show = false;
+
+			this.$refs.body.style.transition = 'height 0.2s';
+			this.$refs.body.style.height = '0px';
+
 			// this.visib = false;
 			setTimeout(() => {
-				// this.open = false;
-				this.$emit('close');
+				this.show = false;
+				setTimeout(() => {
+					this.$emit('close');
+				}, 200);
 			}, 200);
 		},
 		max() {
@@ -98,7 +135,6 @@ export default {
 				this.$refs.body.style.height = null;
 				this.maxed = true;
 			} else this.sizeReset();
-
 		},
 		min() {
 			// this.visib = false;
@@ -128,8 +164,12 @@ export default {
 </script>
 
 <style scoped>
-.outwindow-enter-active,
+/* .outwindow-enter-active,
 .outwindow-leave-active {
+	transition: opacity .2s;
+} */
+
+.outwindow {
 	transition: opacity .2s;
 }
 

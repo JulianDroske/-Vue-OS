@@ -22,13 +22,15 @@ function install(Vue) {
     options.minWidth && (instance.style.minWidth = options.minWidth);
     options.zIndex && (instance.style.zIndex = options.zIndex);
     ContextmenuProxy.destroy();
+	instance.callback = options.onDestroy;
     lastInstance = instance;
     instance.$mount();
   }
   ContextmenuProxy.destroy = function () {
-    if (lastInstance) {
-      lastInstance.$destroy();
-      lastInstance = null;
+	if (lastInstance) {
+		// if(lastInstance.callback) lastInstance.callback();
+		lastInstance.$destroy();
+		lastInstance = null;
     }
   }
   Vue.prototype.$contextmenu = ContextmenuProxy;

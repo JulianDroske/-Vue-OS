@@ -91,11 +91,46 @@ function submit_command() {
     new_block();
     block_log(terminal_user_title + uid + command, true);
 
+	if(command.toString().trim()=='') return;
+
     if (registry.has(command.split(" ")[0])) {
 		var paras = command.replace(new RegExp('\\W+', 'g'), ' ').split(' ');
-        registry.get(command.split(" ")[0])(paras);
+		var uidBackup = uid.toString();
+		var terminal_user_titleBackup = terminal_user_title.toString();
+		uid = '';
+		update_user_title('');
+		document.getElementById('input_source').removeEventListener('keyup', submit_command);
+		var iobj = null;
+        var funcEnd = registry.get(command.split(" ")[0])(paras, iobj = {
+			scan: function(hint, callback){
+				update_user_title(hint);
+				var realfunc = null;
+				document.getElementById('input_source').addEventListener('keyup', realfunc = () => {
+					if(callback){
+						if (!(event.keyCode === 13)) return;
+						var str = document.getElementById("input_source").value;
+						document.getElementById("input_source").value = '';
+						var block = callback(str);
+						if(block){
+							document.getElementById('input_source').removeEventListener('keyup', realfunc);
+							if(uidBackup) update_user_title('');
+						}
+					}
+				});
+			},
+			println: function(text){
+				block_log(text);
+			},
+			end: () => {
+				uid = uidBackup;
+				update_user_title(terminal_user_titleBackup);
+				uidBackup = terminal_user_titleBackup = undefined;
+				document.getElementById('input_source').addEventListener('keyup', submit_command);
+			}
+		});
+		if(funcEnd) iobj.end();
     } else {
-        block_log("'" + command.split(" ")[0] + "': command not found");
+        block_log("'" + command.split(" ")[0].replace(new RegExp("'", 'g'), "\\'") + "': command not found");
     }
 }
 
@@ -104,6 +139,12 @@ register_cmd("help", function(cmd) {
     registry.forEach(function(value, key, map) {
         block_log("    - " + key);
     });
+	return true;
+});
+
+register_cmd('clear', function(cmd) {
+	document.getElementById('wrapper').innerHTML = '<div class="log" style="opacity: 0;"></div>';
+	return true;
 });
 
 // register_cmd("update", function(cmd) {
@@ -127,8 +168,12 @@ register_cmd("help", function(cmd) {
 // });
 
 // jurt
-document.getElementById('screen').onclick = function(){
+GLOB.Focus = function(){
 	document.getElementById('input_source').focus();
+}
+
+document.getElementById('screen').onclick = function(){
+	Focus();
 }
 
 document.onkeydown = function(e){

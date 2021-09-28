@@ -9,10 +9,6 @@ export default {
 		require('./terminal/terminal.js');
 
 		update_user_title('/');
-
-		register_cmd('exit', (paras) => {
-			
-		})
 	}
 }
 </script>

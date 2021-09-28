@@ -20,7 +20,8 @@ export default {
       },
       mainMenuInstance: null,
       customClass: null,
-      mouseListening: false
+      mouseListening: false,
+	  callback: null
     };
   },
   mounted() {
@@ -50,6 +51,7 @@ export default {
     this.removeListener();
     if (this.mainMenuInstance) {
       this.mainMenuInstance.close();
+	  if(this.callback) this.callback()
     }
   },
   methods: {
